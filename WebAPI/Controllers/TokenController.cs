@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BL.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.Security;
 
 namespace WebAPI.Controllers
 {
@@ -9,25 +9,20 @@ namespace WebAPI.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IConfiguration _config;
-        public TokenController(IConfiguration config)
+        private readonly ITokenRepository _tokenRepo;
+
+        public TokenController(IConfiguration config, ITokenRepository tokenRepo)
         {
             _config = config;
+            _tokenRepo = tokenRepo;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("[action]")]   
         public ActionResult GetToken()
         {
-            try
-            {
-                var secureKey = _config["JWT:SecureKey"];
-                var serializedToken = JwtTokenProvider.CreateToken(secureKey, 10);
-
-                return Ok(serializedToken);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            string secureKey = _config["JWT:SecureKey"];
+            string token = _tokenRepo.GetToken(secureKey);
+            return Ok(token);
         }
 
     }

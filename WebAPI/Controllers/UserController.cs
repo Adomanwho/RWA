@@ -14,43 +14,43 @@ namespace WebAPI.Controllers
     {
         private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
-        public UserController(IUserRepository userRepo, IMapper mapper)
+        private readonly IConfiguration _config;
+        public UserController(IUserRepository userRepo, IMapper mapper, IConfiguration config)
         {
             _userRepo = userRepo;
             _mapper = mapper;
+            _config = config;
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<UserDTO> GetAll()
+        public ActionResult<IEnumerable<UserDTO>> GetAll()
         {
             var blUsers = _userRepo.GetAll();
             var apiUsers = _mapper.Map<IEnumerable<UserDTO>>(blUsers);
-            return apiUsers;
+            return Ok(apiUsers);
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}/[action]")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<UserController>
         [HttpPost("[action]")]
-        public void Post([FromBody]string value)
+        [AllowAnonymous]
+        public ActionResult Register([FromBody] UserDTO user)
         {
+            bool registered = _userRepo.RegisterUser(user.Name, user.Email, user.Password);// role id je automatski 2 jer je admin aplikacija
+
+            if (!registered) return Unauthorized("This user already exists.");
+
+            return Created();
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}/[action]")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        [HttpPost("[action]")]
+        [AllowAnonymous]
 
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}/[action]")]
-        public void Delete(int id)
+        public ActionResult<string> Login([FromBody] UserDTO user)
         {
+            string logged = _userRepo.LoginUser(user.Name, user.Password, _config["JWT:SecureKey"]);
+
+            if (string.IsNullOrEmpty(logged)) return Unauthorized("The provided user doesn't exist.");
+            else if (logged[0] == 'T') return Unauthorized(logged);
+            return Ok(logged);
         }
     }
 }

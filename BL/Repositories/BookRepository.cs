@@ -16,7 +16,7 @@ namespace BL.Repositories
         public PagedResult<BLBook> GetPaged(string? search, int page = 1, int pageSize = 10);//Mapiraj u API-u
         public BLBook GetById(int id);//Mapiraj u API-u i logika
         public BLBook Create(BLBook book);//Mapiraj iz dto u bl, posalji tu, rezultat mapiraj nazad
-        public string Update(int id, BLBook request);//True ako je uspjelo, false ako nije
+        public string Update(int id, BLBook request);//Malo cheesy
         public bool Delete(int id);//same
     }
 

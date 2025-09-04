@@ -12,6 +12,7 @@ namespace BL.Mapping
         public AutomapperProfile()
         {
             CreateMap<DALModels.User, BLModels.BLUser>();
+            CreateMap<BL.BLModels.BLUser, DALModels.User>();
             CreateMap<DALModels.Book, BLModels.BLBook>();
         }
     }
