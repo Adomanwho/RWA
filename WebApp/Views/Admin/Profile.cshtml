@@ -1,0 +1,84 @@
+﻿@model WebApp.ViewModels.VMUser
+
+@{
+    ViewData["Title"] = "Admin Profile";
+}
+
+<h2>Profile</h2>
+
+<div class="card p-3">
+    <form id="profileForm">
+        @Html.HiddenFor(m => m.Id)
+
+        <div class="form-group mb-2">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+
+        <div class="form-group mb-2">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+
+        <button type="button" id="btnSaveProfile" class="btn btn-primary mt-2">Save Profile</button>
+    </form>
+</div>
+
+<hr />
+
+<h3>Change Password</h3>
+<div class="card p-3">
+    <form id="passwordForm">
+        @Html.HiddenFor(m => m.Id)
+
+        <div class="form-group mb-2">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form-control" type="password" />
+        </div>
+
+        <button type="button" id="btnChangePassword" class="btn btn-warning mt-2">Update Password</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Update Profile
+            $("#btnSaveProfile").click(function () {
+                var data = {
+                    Id: $("#Id").val(),
+                    Name: $("#Name").val(),
+                    Email: $("#Email").val()
+                };
+
+                $.ajax({
+                    url: '@Url.Action("UpdateProfile", "Admin")',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        alert(res.message);
+                    }
+                });
+            });
+
+            // Update Password
+            $("#btnChangePassword").click(function () {
+                var data = {
+                    Id: $("#Id").val(),
+                    Password: $("#Password").val()
+                };
+
+                $.ajax({
+                    url: '@Url.Action("UpdatePassword", "Admin")',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        alert(res.message);
+                    }
+                });
+            });
+        });
+    </script>
+}

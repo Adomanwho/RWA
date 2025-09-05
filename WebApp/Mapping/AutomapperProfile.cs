@@ -16,6 +16,12 @@ namespace WebApp.Mapping
 
             CreateMap<VMBook, BLBook>()
             .ForMember(dest => dest.Genre, opt => opt.Ignore());
+
+            CreateMap<BLUser, VMAdminProfile>();
+
+            CreateMap<VMAdminProfile, BLUser>()
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.Reservations, opt => opt.Ignore());
         }
     }
 }
