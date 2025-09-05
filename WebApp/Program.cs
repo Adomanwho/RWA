@@ -19,10 +19,10 @@ builder.Services.AddAutoMapper(
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 //if (!app.Environment.IsDevelopment())
 //{
 //    app.UseExceptionHandler("/Home/Error");
@@ -35,6 +35,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}");
 
 app.Run();

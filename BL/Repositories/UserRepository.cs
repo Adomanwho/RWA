@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BL.BLModels;
 using BL.DALModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace BL.Repositories
 
         public IEnumerable<BLUser> GetAll()
         {
-            var dbUsers = _dbContext.Users;
+            var dbUsers = _dbContext.Users.Include(u => u.Role);
             var blUsers = _mapper.Map<IEnumerable<BLUser>>(dbUsers);
 
             _dbContext.WriteLog(2, "UserController.GetAll", "User retrieved.");

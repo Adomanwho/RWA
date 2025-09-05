@@ -8,13 +8,11 @@ namespace WebApp.Controllers;
 
 public class UserController : Controller
 {
-    private readonly ILogger<UserController> _logger;
     private readonly IUserRepository _userRepo;
     private readonly IMapper _mapper;
 
-    public UserController(ILogger<UserController> logger, IUserRepository userRepo, IMapper mapper)
+    public UserController(IUserRepository userRepo, IMapper mapper)
     {
-        _logger = logger;
         _userRepo = userRepo;
         _mapper = mapper;
     }

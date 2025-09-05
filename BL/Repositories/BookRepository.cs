@@ -13,7 +13,7 @@ namespace BL.Repositories
 {
     public interface IBookRepository
     {
-        public PagedResult<BLBook> GetPaged(string? search, int page = 1, int pageSize = 10);//Mapiraj u API-u
+        public PagedResult<BLBook> GetPaged(string? search, int? genreId, int page = 1, int pageSize = 10);//Mapiraj u API-u
         public BLBook GetByName(string name);//Mapiraj u API-u i logika
         public BLBook Create(BLBook book);//Mapiraj iz dto u bl, posalji tu, rezultat mapiraj nazad
         public string Update(string name, BLBook request);//Malo cheesy
@@ -95,7 +95,7 @@ namespace BL.Repositories
             return _mapper.Map<BLBook>(book);
         }
 
-        public PagedResult<BLBook> GetPaged(string? search, int page = 1, int pageSize = 10)
+        public PagedResult<BLBook> GetPaged(string? search, int? genreId, int page = 1, int pageSize = 10)
         {
             page = page < 1 ? 1 : page;
             pageSize = pageSize is < 1 or > 200 ? 10 : pageSize;
@@ -106,6 +106,12 @@ namespace BL.Repositories
                 var s = search.Trim();
                 query = query.Where(b => b.Name.Contains(s) || b.AuthorFirstName.Contains(s) || b.AuthorLastName.Contains(s));
             }
+
+            if (genreId.HasValue && genreId.Value > 0)
+            {
+                query = query.Where(b => b.GenreId == genreId.Value);
+            }
+
             var total = query.Count();
             var items = query
                 .OrderBy(b => b.Name)

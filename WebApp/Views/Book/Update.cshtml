@@ -1,0 +1,44 @@
+﻿@model WebApp.ViewModels.VMBook
+
+@{
+    ViewData["Title"] = "Update Book";
+}
+
+<h1>Update Book</h1>
+
+@using (Html.BeginForm("Update", "Book", FormMethod.Post))
+{
+    @Html.Hidden("OriginalName", Model.Name)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.AuthorFirstName)
+        @Html.TextBoxFor(m => m.AuthorFirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.AuthorFirstName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.AuthorLastName)
+        @Html.TextBoxFor(m => m.AuthorLastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.AuthorLastName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.NumberOfPages)
+        @Html.TextBoxFor(m => m.NumberOfPages, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.NumberOfPages)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Genre")
+        @Html.DropDownListFor(m => m.GenreId, (IEnumerable<SelectListItem>)ViewBag.Genres, "Select Genre", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Update</button>
+    <a class="btn btn-danger mt-2" asp-action="List">X</a>
+}
