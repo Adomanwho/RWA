@@ -10,7 +10,9 @@ namespace WebAPI.Mapping
         {
             CreateMap<BL.BLModels.BLUser, DTOs.UserDTO>();
 
-            CreateMap<BL.BLModels.BLBook, DTOs.BookDTO>();
+            CreateMap<BL.BLModels.BLBook, DTOs.BookDTO>()
+            .ForMember(dest => dest.GenreName, opt => opt.MapFrom(src => src.Genre.Name));// za svaki bookDTO umece u GenreName ime Genre-a
+
             CreateMap(typeof(PagedResult<>), typeof(PagedResult<>));
 
             CreateMap<DTOs.BookDTO, BL.BLModels.BLBook>();

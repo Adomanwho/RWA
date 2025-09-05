@@ -32,11 +32,11 @@ namespace WebAPI.Controllers
 
         [HttpPost("[action]")]
         [AllowAnonymous]
-        public ActionResult Register([FromBody] UserDTO user)
+        public ActionResult Register([FromForm] UserDTO user)
         {
             bool registered = _userRepo.RegisterUser(user.Name, user.Email, user.Password);// role id je automatski 2 jer je admin aplikacija
 
-            if (!registered) return Unauthorized("This user already exists.");
+            if (!registered) return Conflict("This user already exists.");
 
             return Created();
         }
@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
         [HttpPost("[action]")]
         [AllowAnonymous]
 
-        public ActionResult<string> Login([FromBody] UserDTO user)
+        public ActionResult<string> Login([FromForm] UserDTO user)
         {
             string logged = _userRepo.LoginUser(user.Name, user.Password, _config["JWT:SecureKey"]);
 

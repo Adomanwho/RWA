@@ -12,7 +12,6 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    //ako zelis da je neki controller available bez tokena napisi [AllowAnonymous]
     public class BookController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -41,12 +40,12 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("{id}/[action]")]// /api/Book/{id}/GetById
-        public ActionResult<BookDTO> GetById(int id)
+        [HttpGet("{name}/[action]")]// /api/Book/{id}/GetByName
+        public ActionResult<BookDTO> GetByName(string name)
         {
             try
             {
-                BLBook bLBook = _bookRepo.GetById(id);
+                BLBook bLBook = _bookRepo.GetByName(name);
 
                 if (bLBook == null) return NotFound();
 
@@ -65,10 +64,14 @@ namespace WebAPI.Controllers
         {
             try
             {
+                Genre genre = _dbContext.Genres.FirstOrDefault(g => g.Name == book.GenreName);
+                if (genre == null) return NotFound("The entered genre doesn't exist.");
+                book.GenreId = genre.Id;
+
                 var bookToSend = _mapper.Map<BLBook>(book);
                 var blBook = _bookRepo.Create(bookToSend);
 
-                if (blBook == null) return NotFound("Genre not found.");
+                if (blBook == null) return NotFound("Book name invalid (already exists).");
 
                 var dtoBook = _mapper.Map<BookDTO>(blBook);
 
@@ -80,18 +83,22 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/[action]")]// /api/Book/{id}/Update
-        public IActionResult Update(int id, [FromBody] BookDTO book)
+        [HttpPut("{name}/[action]")]// /api/Book/{id}/Update
+        public IActionResult Update(string name, [FromBody] BookDTO book)
         {
             //Malo cheesy nacin za napravit condition ali ok
             try
             {
+                Genre genre = _dbContext.Genres.FirstOrDefault(g => g.Name == book.GenreName);
+                if (genre == null) return NotFound("The entered genre doesn't exist.");
+                book.GenreId = genre.Id;
+
                 BLBook blBook = _mapper.Map<BLBook>(book);
 
-                string returnedString = _bookRepo.Update(id, blBook);
+                string returnedString = _bookRepo.Update(name, blBook);
 
                 //this signifies something went wrong, look at the bookrepo code
-                if (returnedString[0] == 'T') return NotFound("Please check the entered data again.");
+                if (returnedString[0] == 'T') return NotFound(returnedString);
                 return NoContent();
             }
             catch (Exception)
@@ -100,12 +107,12 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}/[action]")]// /api/Book/{id}/Delete
-        public IActionResult Delete(int id)
+        [HttpDelete("{name}/[action]")]// /api/Book/{id}/Delete
+        public IActionResult Delete(string name)
         {
             try
             {
-                bool returned = _bookRepo.Delete(id);
+                bool returned = _bookRepo.Delete(name);
                 if (!returned) return NotFound("No book with this id.");
                 return NoContent();
             }

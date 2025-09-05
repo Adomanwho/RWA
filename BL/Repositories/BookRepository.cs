@@ -14,10 +14,10 @@ namespace BL.Repositories
     public interface IBookRepository
     {
         public PagedResult<BLBook> GetPaged(string? search, int page = 1, int pageSize = 10);//Mapiraj u API-u
-        public BLBook GetById(int id);//Mapiraj u API-u i logika
+        public BLBook GetByName(string name);//Mapiraj u API-u i logika
         public BLBook Create(BLBook book);//Mapiraj iz dto u bl, posalji tu, rezultat mapiraj nazad
-        public string Update(int id, BLBook request);//Malo cheesy
-        public bool Delete(int id);//same
+        public string Update(string name, BLBook request);//Malo cheesy
+        public bool Delete(string name);//same
     }
 
     public class BookRepository : IBookRepository
@@ -36,8 +36,8 @@ namespace BL.Repositories
         {
             try
             {
-                var existsGenre = _dbContext.Genres.Any(g => g.Id == book.GenreId);
-                if (!existsGenre) return null;
+                bool existsBook = _dbContext.Books.Any(b => b.Name == book.Name);
+                if (existsBook) return null;
 
                 var entity = new Book
                 {
@@ -65,33 +65,33 @@ namespace BL.Repositories
             }
         }
 
-        public bool Delete(int id)
+        public bool Delete(string name)
         {
             try
             {
-                var book = _dbContext.Books.Find(id);
+                var book = _dbContext.Books.FirstOrDefault(b => b.Name == name);
                 if (book == null) return false;
                 _dbContext.Books.Remove(book);
                 _dbContext.SaveChanges();
-                _dbContext.WriteLog(2, "BookController.Delete", $"Book {id} deleted");
+                _dbContext.WriteLog(2, "BookController.Delete", $"Book \" {name} \" not found");
                 return true;
             }
             catch (Exception ex)
             {
-                _dbContext.WriteLog(3, "BookController.Delete", $"Error deleting book {id}", ex.Message);
+                _dbContext.WriteLog(3, "BookController.Delete", $"Error deleting book  \"{name}\"", ex.Message);
                 throw;
             }
         }
 
-        public BLBook GetById(int id)
+        public BLBook GetByName(string name)
         {
-            var book =  _dbContext.Books.Include(b => b.Genre).FirstOrDefault(b => b.Id == id);
+            var book =  _dbContext.Books.Include(b => b.Genre).FirstOrDefault(b => b.Name == name);
             if (book == null)
             {
-                _dbContext.WriteLog(2, "BookController.GetById", $"Book {id} not found");
+                _dbContext.WriteLog(2, "BookController.GetByName", $"Book \"{name}\" not found");
                 return null;
             }
-            _dbContext.WriteLog(2, "BookController.GetById", $"Book {id} retrieved");
+            _dbContext.WriteLog(2, "BookController.GetByName", $"Book \"{name}\" not found");
             return _mapper.Map<BLBook>(book);
         }
 
@@ -118,7 +118,8 @@ namespace BL.Repositories
                     AuthorFirstName = b.AuthorFirstName,
                     AuthorLastName = b.AuthorLastName,
                     NumberOfPages = b.NumberOfPages,
-                    GenreId = b.GenreId
+                    GenreId = b.GenreId,
+                    Genre = b.Genre
                 })
                 .ToList();
 
@@ -126,15 +127,18 @@ namespace BL.Repositories
             return new PagedResult<BLBook>(items, page, pageSize, total);
         }
 
-        public string Update(int id, BLBook request)
+        public string Update(string name, BLBook request)
         {
             try
             {
-                var book = _dbContext.Books.FirstOrDefault(b => b.Id == id);
-                if (book == null) return "The book wasn't found by id.";
+                var book = _dbContext.Books.FirstOrDefault(b => b.Name == name);
+                if (book == null) return "The book with this name wasn't found.";
 
                 var existsGenre = _dbContext.Genres.Any(g => g.Id == request.GenreId);
                 if (!existsGenre) return "The genre doesn't exist.";
+                                                              //match u bazi sa onim na kaj se zeli upd ali nije isto kao knjiga koja se zeli upd
+                var existsBookName = _dbContext.Books.Any(b => b.Name == request.Name && b.Name != name);//nije isto ime i dozvoljava mijenjanje iste knjige
+                if (existsBookName) return "The book you are trying to update to (the name you entered) already exists. (Change the name)";
 
                 book.Name = request.Name;
                 book.AuthorFirstName = request.AuthorFirstName;
@@ -143,12 +147,12 @@ namespace BL.Repositories
                 book.GenreId = request.GenreId;
                 _dbContext.SaveChanges();
 
-                _dbContext.WriteLog(2, "BookController.Update", $"Book {id} updated");
+                _dbContext.WriteLog(2, "BookController.Update", $"Book \"{name}\" not found");
                 return "Book updated successfully.";
             }
             catch (Exception ex)
             {
-                _dbContext.WriteLog(3, "BookController.Update", $"Error updating book {id}", ex.Message);
+                _dbContext.WriteLog(3, "BookController.Update", $"Error updating book \"{name}\"", ex.Message);
                 throw;
             }
         }

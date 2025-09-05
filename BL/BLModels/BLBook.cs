@@ -19,5 +19,6 @@ namespace BL.BLModels
         public int NumberOfPages { get; set; }
 
         public int GenreId { get; set; }
+        public Genre Genre { get; set; } = null!;
     }
 }
