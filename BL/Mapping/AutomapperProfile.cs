@@ -13,7 +13,12 @@ namespace BL.Mapping
         {
             CreateMap<DALModels.User, BLModels.BLUser>();
             CreateMap<BL.BLModels.BLUser, DALModels.User>();
+
             CreateMap<DALModels.Book, BLModels.BLBook>();
+
+            CreateMap<DALModels.Genre, BLModels.BLGenre>();
+
+            CreateMap<DALModels.Location, BLModels.BLLocation>();
         }
     }
 }
