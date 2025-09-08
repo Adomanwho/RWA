@@ -22,6 +22,12 @@ namespace WebApp.Mapping
             CreateMap<VMAdminProfile, BLUser>()
                 .ForMember(dest => dest.Role, opt => opt.Ignore())
                 .ForMember(dest => dest.Reservations, opt => opt.Ignore());
+
+            CreateMap<BLGenre, VMGenre>();
+            CreateMap<VMGenre, BLGenre>();
+
+            CreateMap<BLLocation, VMLocation>();
+            CreateMap<VMLocation, BLLocation>();
         }
     }
 }

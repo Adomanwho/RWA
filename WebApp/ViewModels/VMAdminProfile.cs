@@ -9,11 +9,13 @@ namespace WebApp.ViewModels
 
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(50, ErrorMessage = "Name cannot be longer than 50 characters.")]
+        [Display(Name = "Username")]
         public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         [StringLength(100, ErrorMessage = "Email cannot be longer than 100 characters.")]
+        [Display(Name = "Email")]
         public string Email { get; set; } = null!;
     }
 }

@@ -11,16 +11,12 @@ namespace WebApp.Controllers
     public class LoginController : Controller
     {
         private readonly IUserRepository _userRepo;
-        private readonly RwaLibraryContext _dbContext;
         private readonly IConfiguration _config;
-        private readonly IMapper _mapper;
 
-        public LoginController(IUserRepository userRepo, RwaLibraryContext dbContext, IConfiguration config, IMapper mapper)
+        public LoginController(IUserRepository userRepo, IConfiguration config)
         {
             _userRepo = userRepo;
-            _dbContext = dbContext;
             _config = config;
-            _mapper = mapper;
         }
 
         [HttpGet]

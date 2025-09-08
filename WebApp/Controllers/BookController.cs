@@ -50,7 +50,7 @@ namespace WebApp.Controllers
             return View(model);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/Book/[action]")]
         public IActionResult Create()
         {
             ViewBag.Genres = _dbContext.Genres
@@ -59,8 +59,7 @@ namespace WebApp.Controllers
             return View(new VMBook());
         }
 
-        // POST: Create
-        [HttpPost("[action]")]
+        [HttpPost("/Book/[action]")]
         public IActionResult Create(VMBook model)
         {
             if (!ModelState.IsValid)
@@ -77,8 +76,7 @@ namespace WebApp.Controllers
             return RedirectToAction("List");
         }
 
-        // GET: Update
-        [HttpGet("[action]")]
+        [HttpGet("/Book/[action]")]
         public IActionResult Update(string name)
         {
             var book = _bookRepo.GetByName(name);
@@ -92,8 +90,7 @@ namespace WebApp.Controllers
             return View(model);
         }
 
-        // POST: Update
-        [HttpPost("[action]")]
+        [HttpPost("/Book/[action]")]
         public IActionResult Update(string OriginalName, VMBook model)
         {
             if (!ModelState.IsValid)
@@ -109,8 +106,7 @@ namespace WebApp.Controllers
             return RedirectToAction("List");
         }
 
-        // DELETE: Delete
-        [HttpGet("[action]")] // Using GET for simplicity in HTML link; normally DELETE is done via AJAX
+        [HttpGet("/Book/[action]")]
         public IActionResult Delete(string name)
         {
             if (!string.IsNullOrEmpty(name))

@@ -1,0 +1,19 @@
+﻿@model WebApp.ViewModels.VMGenre
+
+@{
+    ViewData["Title"] = "Add Genre";
+}
+
+<h1>Add Genre</h1>
+
+@using (Html.BeginForm("Add", "Genre", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Save</button>
+    <a asp-action="Index" class="btn btn-danger mt-2">X</a>
+}

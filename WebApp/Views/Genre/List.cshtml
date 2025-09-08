@@ -1,0 +1,32 @@
+﻿@model IEnumerable<WebApp.ViewModels.VMGenre>
+
+@{
+    ViewData["Title"] = "Genres";
+}
+
+<h1>Genres</h1>
+
+<p>
+    <a class="btn btn-success" asp-action="Add">Add Genre</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.First().Name)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var genre in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(_ => genre.Name)</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Update" asp-route-name="@genre.Name">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-name="@genre.Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

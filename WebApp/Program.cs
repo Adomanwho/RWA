@@ -20,6 +20,8 @@ builder.Services.AddAutoMapper(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 
 var app = builder.Build();
 

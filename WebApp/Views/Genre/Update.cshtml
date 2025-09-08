@@ -1,0 +1,21 @@
+﻿@model WebApp.ViewModels.VMGenre
+
+@{
+    ViewData["Title"] = "Update Genre";
+}
+
+<h1>Update Genre</h1>
+
+@using (Html.BeginForm("Update", "Genre", FormMethod.Post))
+{
+    @Html.Hidden("OriginalName", Model.Name)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Update</button>
+    <a asp-action="Index" class="btn btn-danger mt-2">X</a>
+}

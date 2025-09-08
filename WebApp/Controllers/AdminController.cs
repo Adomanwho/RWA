@@ -19,7 +19,6 @@ namespace WebApp.Controllers
             _mapper = mapper;
         }
 
-        // GET: Admin/Profile
         [HttpGet]
         public IActionResult Profile()
         {
@@ -55,7 +54,6 @@ namespace WebApp.Controllers
             if (string.IsNullOrEmpty(model.Password))
                 return BadRequest(new { success = false, message = "Password is required." });
 
-            // ⬇️ Use Id instead of RoleId
             var result = _userRepo.UpdatePassword(model.Id, model.Password);
 
             if (result == "Success")

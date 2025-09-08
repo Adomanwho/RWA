@@ -1,0 +1,32 @@
+﻿@model IEnumerable<WebApp.ViewModels.VMLocation>
+
+@{
+    ViewData["Title"] = "Locations";
+}
+
+<h1>Locations</h1>
+
+<p>
+    <a class="btn btn-success" asp-action="Add">Add Location</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.First().Name)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var location in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(_ => location.Name)</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Update" asp-route-name="@location.Name">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-name="@location.Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
