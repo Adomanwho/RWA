@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BL.DALModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace BL.Mapping
             CreateMap<DALModels.Genre, BLModels.BLGenre>();
 
             CreateMap<DALModels.Location, BLModels.BLLocation>();
+
+            CreateMap<DALModels.LocationBook, BLModels.BLLocationBook>();
         }
     }
 }

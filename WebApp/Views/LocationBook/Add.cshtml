@@ -1,0 +1,30 @@
+﻿@model WebApp.ViewModels.VMLocationBook
+
+@{
+    ViewData["Title"] = "Add LocationBook";
+}
+
+<h1>Add LocationBook</h1>
+
+@using (Html.BeginForm("Add", "LocationBook", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.BookName)
+        @Html.TextBoxFor(m => m.BookName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.BookName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.LocationName)
+        @Html.TextBoxFor(m => m.LocationName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.LocationName)
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="text-danger">@Model.Message</div>
+    }
+
+    <button type="submit" class="btn btn-primary mt-2">Add</button>
+    <a class="btn btn-danger mt-2" asp-action="List">X</a>
+}

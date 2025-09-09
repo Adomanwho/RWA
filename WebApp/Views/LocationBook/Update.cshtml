@@ -1,0 +1,33 @@
+﻿@model WebApp.ViewModels.VMLocationBook
+
+@{
+    ViewData["Title"] = "Update LocationBook";
+}
+
+<h1>Update LocationBook</h1>
+
+@using (Html.BeginForm("Update", "LocationBook", FormMethod.Post))
+{
+    @Html.Hidden("originalBookName", ViewContext.HttpContext.Request.Query["bookName"])
+    @Html.Hidden("originalLocationName", ViewContext.HttpContext.Request.Query["locationName"])
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.BookName)
+        @Html.TextBoxFor(m => m.BookName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.BookName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.LocationName)
+        @Html.TextBoxFor(m => m.LocationName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.LocationName)
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="text-danger">@Model.Message</div>
+    }
+
+    <button type="submit" class="btn btn-primary mt-2">Update</button>
+    <a class="btn btn-danger mt-2" asp-action="List">X</a>
+}

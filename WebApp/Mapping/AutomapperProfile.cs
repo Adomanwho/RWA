@@ -20,14 +20,22 @@ namespace WebApp.Mapping
             CreateMap<BLUser, VMAdminProfile>();
 
             CreateMap<VMAdminProfile, BLUser>()
-                .ForMember(dest => dest.Role, opt => opt.Ignore())
-                .ForMember(dest => dest.Reservations, opt => opt.Ignore());
+            .ForMember(dest => dest.Role, opt => opt.Ignore())
+            .ForMember(dest => dest.Reservations, opt => opt.Ignore());
 
             CreateMap<BLGenre, VMGenre>();
             CreateMap<VMGenre, BLGenre>();
 
             CreateMap<BLLocation, VMLocation>();
             CreateMap<VMLocation, BLLocation>();
+
+            CreateMap<BLLocationBook, VMLocationBook>()
+            .ForMember(dest => dest.BookName, opt => opt.MapFrom(src => src.Book.Name))
+            .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location.Name));
+
+            CreateMap<VMLocationBook, BLLocationBook>()
+            .ForMember(dest => dest.Book, opt => opt.Ignore())
+            .ForMember(dest => dest.Location, opt => opt.Ignore());
         }
     }
 }
