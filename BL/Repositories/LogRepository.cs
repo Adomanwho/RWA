@@ -1,4 +1,5 @@
-﻿using BL.BLModels;
+﻿using AutoMapper;
+using BL.BLModels;
 using BL.DALModels;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,21 @@ namespace BL.Repositories
 {
     public interface ILogRepository
     {
-        public PagedResult<Log> GetPaged(int? level, int page = 1, int pageSize = 50);  
+        public PagedResult<Log> GetPaged(int? level, int page = 1, int pageSize = 50);
+        int GetLogCount();
+        IEnumerable<Log> GetLatest(int count);
     }
     public class LogRepository : ILogRepository
     {
         private readonly RwaLibraryContext _dbContext = new();
+        private readonly IMapper _mapper;
 
-        public LogRepository(RwaLibraryContext dbContext)
+        public LogRepository(RwaLibraryContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
+
         public PagedResult<Log> GetPaged(int? level, int page = 1, int pageSize = 50)
         {
             IQueryable<Log> query = _dbContext.Logs.AsQueryable();
@@ -33,6 +39,19 @@ namespace BL.Repositories
                 .ToList();
 
             return new PagedResult<Log>(items, page, pageSize, total);
+        }
+
+        public int GetLogCount()
+        {
+            return _dbContext.Logs.Count();
+        }
+
+        public IEnumerable<Log> GetLatest(int count)
+        {
+            return _dbContext.Logs
+                .OrderByDescending(l => l.Timestamp)
+                .Take(count)
+                .ToList();
         }
     }
 }

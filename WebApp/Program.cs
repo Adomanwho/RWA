@@ -24,6 +24,8 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ILocationBookRepository, LocationBookRepository>();
 
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 //if (!app.Environment.IsDevelopment())
@@ -35,6 +37,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

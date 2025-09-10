@@ -22,13 +22,19 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
-            var admin = _userRepo.GetAll().FirstOrDefault(u => u.RoleId == 2);
-            if (admin == null)
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
             {
                 return RedirectToAction("Index", "Login");
             }
 
-            var vm = _mapper.Map<VMUser>(admin);
+            var user = _userRepo.GetById(userId.Value);
+            if (user == null || user.RoleId != 2)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            var vm = _mapper.Map<VMUser>(user);
             return View(vm);
         }
 
